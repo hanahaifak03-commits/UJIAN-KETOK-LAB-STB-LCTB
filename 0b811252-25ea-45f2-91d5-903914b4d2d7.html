@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 26.2.5.1 (Linux)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="00:00:00"/>
+	<style type="text/css">
+		@page { size: 8.27in 11.69in; margin: 0.79in }
+		p { margin-bottom: 0.1in; line-height: 115%; background: transparent }
+		pre { background: transparent }
+		pre.western { font-family: "Liberation Mono", monospace; font-size: 10pt }
+		pre.cjk { font-family: "NSimSun", monospace; font-size: 10pt }
+		pre.ctl { font-family: "Liberation Mono", monospace; font-size: 10pt }
+	</style>
+</head>
+<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre class="western">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;id&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Ujian Ketok Interaktif: Struktur Tumbuhan&lt;/title&gt;
+    &lt;!-- React &amp; ReactDOM CDN --&gt;
+    &lt;script src=&quot;https://unpkg.com/react@18/umd/react.production.min.js&quot; crossorigin&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://unpkg.com/react-dom@18/umd/react-dom.production.min.js&quot; crossorigin&gt;&lt;/script&gt;
+    &lt;!-- Babel CDN for JSX --&gt;
+    &lt;script src=&quot;https://unpkg.com/@babel/standalone/babel.min.js&quot;&gt;&lt;/script&gt;
+    &lt;!-- Tailwind CSS CDN --&gt;
+    &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+    &lt;!-- Lucide Icons CDN --&gt;
+    &lt;script src=&quot;https://unpkg.com/lucide@latest&quot;&gt;&lt;/script&gt;
+    &lt;style&gt;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdf4;
+        }
+        .pulse-timer {
+            animation: pulse-red 1s infinite;
+        }
+        @keyframes pulse-red {
+            0%, 100% { color: #dc2626; border-color: #dc2626; }
+            50% { color: #991b1b; border-color: #991b1b; transform: scale(1.05); }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id=&quot;root&quot;&gt;&lt;/div&gt;
+
+    &lt;script type=&quot;text/babel&quot;&gt;
+        const { useState, useEffect, useRef } = React;
+
+        const quizData = [
+            {
+                station: 1,
+                title: &quot;Jaringan Dasar &amp; Penyokong&quot;,
+                questionText: &quot;1. Jaringan pelindung pada permukaan luar tumbuhan adalah (a), sedangkan jaringan penyokong yang terdiri dari sel-sel mati berdinding tebal adalah (b). Tempat terjadinya fotosintesis paling aktif pada daun berada di jaringan (c).&quot;,
+                blanks: [
+                    { id: &quot;a&quot;, label: &quot;(a) Jaringan pelindung luar&quot;, keys: [&quot;epidermis&quot;] },
+                    { id: &quot;b&quot;, label: &quot;(b) Jaringan penyokong sel mati&quot;, keys: [&quot;sklerenkim&quot;] },
+                    { id: &quot;c&quot;, label: &quot;(c) Tempat fotosintesis aktif daun&quot;, keys: [&quot;palisade&quot;, &quot;jaringan palisade&quot;, &quot;jaringan pagar&quot;, &quot;pagar&quot;] }
+                ]
+            },
+            {
+                station: 2,
+                title: &quot;Struktur Akar &amp; Transportasi&quot;,
+                questionText: &quot;2. Bagian akar yang berfungsi menyerap air dan garam mineral adalah (d), lapisan pelindung di bagian paling ujung akar dinamakan (e), sedangkan pembuluh yang mengangkut hasil fotosintesis adalah (f).&quot;,
+                blanks: [
+                    { id: &quot;d&quot;, label: &quot;(d) Penyerap air dan garam&quot;, keys: [&quot;rambut akar&quot;, &quot;bulu akar&quot;, &quot;rambut/bulu akar&quot;] },
+                    { id: &quot;e&quot;, label: &quot;(e) Pelindung ujung akar&quot;, keys: [&quot;kaliptra&quot;, &quot;tudung akar&quot;] },
+                    { id: &quot;f&quot;, label: &quot;(f) Pembuluh hasil fotosintesis&quot;, keys: [&quot;floem&quot;] }
+                ]
+            },
+            {
+                station: 3,
+                title: &quot;Struktur Batang&quot;,
+                questionText: &quot;3. Pembuluh yang mengangkut air dan hara dari tanah ke daun adalah (g), bagian batang yang memungkinkan pertambahan diameter (pertumbuhan sekunder) adalah (h), dan pori-pori pada permukaan batang berkayu untuk pertukaran gas disebut (i).&quot;,
+                blanks: [
+                    { id: &quot;g&quot;, label: &quot;(g) Pembuluh pengangkut air/hara&quot;, keys: [&quot;xilem&quot;] },
+                    { id: &quot;h&quot;, label: &quot;(h) Pertambahan diameter batang&quot;, keys: [&quot;kambium&quot;] },
+                    { id: &quot;i&quot;, label: &quot;(i) Pori pertukaran gas batang&quot;, keys: [&quot;lentisel&quot;] }
+                ]
+            },
+            {
+                station: 4,
+                title: &quot;Epidermis &amp; Derivatnya&quot;,
+                questionText: &quot;4. Pori-pori pada permukaan daun untuk keluar masuknya gas disebut (j), sel pelindung yang mengapit pori tersebut dinamakan (k), sedangkan struktur tambahan seperti rambut atau duri pada epidermis disebut (l).&quot;,
+                blanks: [
+                    { id: &quot;j&quot;, label: &quot;(j) Pori permukaan daun&quot;, keys: [&quot;stomata&quot;, &quot;stoma&quot;] },
+                    { id: &quot;k&quot;, label: &quot;(k) Sel pengapit stomata&quot;, keys: [&quot;sel penjaga&quot;, &quot;guard cell&quot;, &quot;sel penutup&quot;] },
+                    { id: &quot;l&quot;, label: &quot;(l) Trikoma / rambut epidermis&quot;, keys: [&quot;trikoma&quot;, &quot;trikoma/rambut&quot;] }
+                ]
+            },
+            {
+                station: 5,
+                title: &quot;Anatomi Bunga&quot;,
+                questionText: &quot;5. Alat reproduksi jantan pada bunga dinamakan (m), sedangkan alat reproduksi betinanya adalah (n). Bagian Bunga yang menarik perhatian serangga penyerbuk disebut (o).&quot;,
+                blanks: [
+                    { id: &quot;m&quot;, label: &quot;(m) Alat reproduksi jantan&quot;, keys: [&quot;benang sari&quot;, &quot;stamen&quot;] },
+                    { id: &quot;n&quot;, label: &quot;(n) Alat reproduksi betina&quot;, keys: [&quot;putik&quot;, &quot;pistillum&quot;] },
+                    { id: &quot;o&quot;, label: &quot;(o) Penarik penyerbuk&quot;, keys: [&quot;mahkota&quot;, &quot;mahkota bunga&quot;, &quot;corolla&quot;] }
+                ]
+            },
+            {
+                station: 6,
+                title: &quot;Adaptasi &amp; Jaringan Meristem&quot;,
+                questionText: &quot;6. Daun berlapis lilin penahan penguapan dinamakan lapisan (p), jaringan penyokong pada organ tumbuhan yang masih aktif tumbuh dinamakan (q), dan daerah titik tumbuh di ujung batang/akar dinamakan meristem (r).&quot;,
+                blanks: [
+                    { id: &quot;p&quot;, label: &quot;(p) Lapisan penahan penguapan&quot;, keys: [&quot;kutikula&quot;] },
+                    { id: &quot;q&quot;, label: &quot;(q) Penyokong organ aktif tumbuh&quot;, keys: [&quot;kolenkim&quot;] },
+                    { id: &quot;r&quot;, label: &quot;(r) Meristem titik tumbuh ujung&quot;, keys: [&quot;apikal&quot;, &quot;meristem apikal&quot;] }
+                ]
+            },
+            {
+                station: 7,
+                title: &quot;Organel &amp; Komposisi Sel Tumbuhan&quot;,
+                questionText: &quot;7. Daerah penyimpan cadangan makanan utama pada sel tumbuhan adalah organel (s), zat pembentuk dinding sel tumbuhan terutama terdiri atas (t), sedangkan plastida penyerap energi cahaya matahari disebut (u).&quot;,
+                blanks: [
+                    { id: &quot;s&quot;, label: &quot;(s) Organel penyimpan cadangan makanan&quot;, keys: [&quot;vakuola&quot;] },
+                    { id: &quot;t&quot;, label: &quot;(t) Penyusun dinding sel utama&quot;, keys: [&quot;selulosa&quot;] },
+                    { id: &quot;u&quot;, label: &quot;(u) Plastida penyerap cahaya&quot;, keys: [&quot;kloroplas&quot;] }
+                ]
+            },
+            {
+                station: 8,
+                title: &quot;Bagian Perhiasan &amp; Penyangga Bunga&quot;,
+                questionText: &quot;8. Bunga lengkap memiliki perhiasan bunga berupa kelopak dan (v), bagian dasar bunga tempat melekatnya perhiasan bunga dinamakan (w), sedangkan tangkai penghubung kepala putik dan bakal buah dinamakan (x).&quot;,
+                blanks: [
+                    { id: &quot;v&quot;, label: &quot;(v) Perhiasan bunga selain kelopak&quot;, keys: [&quot;mahkota&quot;, &quot;mahkota bunga&quot;] },
+                    { id: &quot;w&quot;, label: &quot;(w) Dasar melekatnya perhiasan bunga&quot;, keys: [&quot;dasar bunga&quot;, &quot;reseptakel&quot;] },
+                    { id: &quot;x&quot;, label: &quot;(x) Tangkai penghubung putik&quot;, keys: [&quot;tangkai putik&quot;, &quot;stilus&quot;] }
+                ]
+            },
+            {
+                station: 9,
+                title: &quot;Struktur Biji &amp; Perkecambahan&quot;,
+                questionText: &quot;9. Struktur biji yang berfungsi memberikan nutrisi selama perkecambahan adalah (y), calon akar pada embrio biji dinamakan (z), sedangkan calon batang/daun pertama dinamakan (aa).&quot;,
+                blanks: [
+                    { id: &quot;y&quot;, label: &quot;(y) Nutrisi perkecambahan biji&quot;, keys: [&quot;endosperma&quot;, &quot;endosperm&quot;] },
+                    { id: &quot;z&quot;, label: &quot;(z) Calon akar embrio&quot;, keys: [&quot;radikula&quot;] },
+                    { id: &quot;aa&quot;, label: &quot;(aa) Calon batang/daun pertama&quot;, keys: [&quot;plumula&quot;] }
+                ]
+            },
+            {
+                station: 10,
+                title: &quot;Anatomi Berkas Pengangkut Batang&quot;,
+                questionText: &quot;10. Batang tumbuhan monokotil memiliki tipe berkas pengangkut (ab), sedangkan pada dikotil berkas pengangkut tersusun (ac) dan dipisahkan oleh (ad).&quot;,
+                blanks: [
+                    { id: &quot;ab&quot;, label: &quot;(ab) Tipe berkas monokotil&quot;, keys: [&quot;tersebar&quot;, &quot;tersebar/tidak teratur&quot;] },
+                    { id: &quot;ac&quot;, label: &quot;(ac) Susunan berkas dikotil&quot;, keys: [&quot;teratur&quot;, &quot;melingkar&quot;, &quot;teratur/melingkar&quot;] },
+                    { id: &quot;ad&quot;, label: &quot;(ad) Pemisah berkas dikotil&quot;, keys: [&quot;kambium&quot;] }
+                ]
+            },
+            {
+                station: 11,
+                title: &quot;Anatomi Internal Akar&quot;,
+                questionText: &quot;11. Pita tebal dari zat gabus pada lapisan endodermis akar dinamakan pita (ae), lapisan sel terluar silinder pusat akar dinamakan (af), dan percabangan akar berasal dari aktivitas jaringan (ag).&quot;,
+                blanks: [
+                    { id: &quot;ae&quot;, label: &quot;(ae) Pita tebal endodermis&quot;, keys: [&quot;caspary&quot;, &quot;pita caspary&quot;] },
+                    { id: &quot;af&quot;, label: &quot;(af) Terluar silinder pusat akar&quot;, keys: [&quot;perisikel&quot;, &quot;perikambium&quot;] },
+                    { id: &quot;ag&quot;, label: &quot;(ag) Asal percabangan akar&quot;, keys: [&quot;perisikel&quot;, &quot;perikambium&quot;] }
+                ]
+            },
+            {
+                station: 12,
+                title: &quot;Pertumbuhan Sekunder &amp; Kulit Kayu&quot;,
+                questionText: &quot;12. Pembentukan lingkaran tahunan pada batang dikotil terjadi akibat aktivitas kambium pada musim (ah) dan musim (ai), sedangkan jaringan gabus pembentuk kulit luar dinamakan (aj).&quot;,
+                blanks: [
+                    { id: &quot;ah&quot;, label: &quot;(ah) Musim pertumbuhan cepat&quot;, keys: [&quot;hujan&quot;, &quot;basah&quot;, &quot;musim hujan&quot;] },
+                    { id: &quot;ai&quot;, label: &quot;(ai) Musim pertumbuhan lambat&quot;, keys: [&quot;kemarau&quot;, &quot;kering&quot;, &quot;musim kemarau&quot;] },
+                    { id: &quot;aj&quot;, label: &quot;(aj) Pembentuk kulit gabus luar&quot;, keys: [&quot;feloderm&quot;, &quot;gabus&quot;, &quot;felogen&quot;] }
+                ]
+            },
+            {
+                station: 13,
+                title: &quot;Mesofil &amp; Pertulangan Daun&quot;,
+                questionText: &quot;13. Daun tersusun atas mesofil yang terbagi menjadi jaringan pagar (palisade) dan jaringan (ak), pertulangan daun dikotil umumnya berbentuk (al), sedangkan monokotil berbentuk (am).&quot;,
+                blanks: [
+                    { id: &quot;ak&quot;, label: &quot;(ak) Jaringan mesofil selain palisade&quot;, keys: [&quot;spons&quot;, &quot;bunga karang&quot;, &quot;jaringan spons&quot;] },
+                    { id: &quot;al&quot;, label: &quot;(al) Bentuk tulang daun dikotil&quot;, keys: [&quot;menyirip&quot;, &quot;menjari&quot;, &quot;menyirip/menjari&quot;] },
+                    { id: &quot;am&quot;, label: &quot;(am) Bentuk tulang daun monokotil&quot;, keys: [&quot;sejajar&quot;, &quot;melengkung&quot;, &quot;sejajar/melengkung&quot;] }
+                ]
+            },
+            {
+                station: 14,
+                title: &quot;Sistem Perakaran &amp; Empulur&quot;,
+                questionText: &quot;14. Akar tumbuhan monokotil memiliki sistem perakaran (an), sedangkan dikotil memiliki sistem perakaran (ao). Bagian tengah akar atau batang tempat tersimpannya jaringan dasar dinamakan (ap).&quot;,
+                blanks: [
+                    { id: &quot;an&quot;, label: &quot;(an) Sistem akar monokotil&quot;, keys: [&quot;serabut&quot;] },
+                    { id: &quot;ao&quot;, label: &quot;(ao) Sistem akar dikotil&quot;, keys: [&quot;tunggang&quot;] },
+                    { id: &quot;ap&quot;, label: &quot;(ap) Bagian tengah akar/batang&quot;, keys: [&quot;empulur&quot;] }
+                ]
+            },
+            {
+                station: 15,
+                title: &quot;Elemen Penyusun Pembuluh&quot;,
+                questionText: &quot;15. Pembuluh xilem tersusun atas sel-sel yaitu trakea dan (aq), sedangkan pembuluh floem tersusun atas sel tapis dan sel (ar). Komponen pembuluh xilem yang berfungsi menyokong mekanis adalah (as).&quot;,
+                blanks: [
+                    { id: &quot;aq&quot;, label: &quot;(aq) Elemen xilem selain trakea&quot;, keys: [&quot;trakeid&quot;] },
+                    { id: &quot;ar&quot;, label: &quot;(ar) Sel pendamping floem&quot;, keys: [&quot;pendamping&quot;, &quot;sel pendamping&quot;, &quot;companion cell&quot;] },
+                    { id: &quot;as&quot;, label: &quot;(as) Penyangga mekanis xilem&quot;, keys: [&quot;serat xilem&quot;, &quot;serabut xilem&quot;] }
+                ]
+            },
+            {
+                station: 16,
+                title: &quot;Fungsi Organ Reproduksi Bunga&quot;,
+                questionText: &quot;16. Bagian bunga yang berfungsi melindungi bunga saat masih menguncup adalah (at), tempat berkembangnya sel telur di dalam putik adalah (au), sedangkan bagian yang menerima serbuk sari saat penyerbukan dinamakan (av).&quot;,
+                blanks: [
+                    { id: &quot;at&quot;, label: &quot;(at) Pelindung kuncup bunga&quot;, keys: [&quot;kelopak&quot;, &quot;kelopak bunga&quot;, &quot;kaliks&quot;] },
+                    { id: &quot;au&quot;, label: &quot;(au) Tempat sel telur berkembang&quot;, keys: [&quot;bakal biji&quot;, &quot;ovulum&quot;] },
+                    { id: &quot;av&quot;, label: &quot;(av) Penerima serbuk sari&quot;, keys: [&quot;kepala putik&quot;, &quot;stigma&quot;] }
+                ]
+            },
+            {
+                station: 17,
+                title: &quot;Fisiologi Daun &amp; Transpirasi&quot;,
+                questionText: &quot;17. Fotosintesis membutuhkan air, cahaya, dan gas (aw) untuk menghasilkan oksigen serta (ax). Proses transpirasi tumbuhan paling banyak terjadi melalui (ay).&quot;,
+                blanks: [
+                    { id: &quot;aw&quot;, label: &quot;(aw) Gas bahan fotosintesis&quot;, keys: [&quot;karbondioksida&quot;, &quot;karbon dioksida&quot;, &quot;co2&quot;] },
+                    { id: &quot;ax&quot;, label: &quot;(ax) Hasil utama fotosintesis&quot;, keys: [&quot;glukosa&quot;, &quot;karbohidrat&quot;, &quot;gula&quot;] },
+                    { id: &quot;ay&quot;, label: &quot;(ay) Jalur utama transpirasi&quot;, keys: [&quot;stomata&quot;, &quot;stoma&quot;] }
+                ]
+            },
+            {
+                station: 18,
+                title: &quot;Komunikasi &amp; Penebalan Sel&quot;,
+                questionText: &quot;18. Dinding sel tumbuhan tingkat tinggi mengandung selulosa, (az), dan glikoprotein. Penghubung antar sel tumbuhan yang berupa saluran sitoplasma tipis dinamakan (ba), sedangkan penebalan dinding sel sekunder mengandung zat (bb).&quot;,
+                blanks: [
+                    { id: &quot;az&quot;, label: &quot;(az) Matriks dinding sel&quot;, keys: [&quot;hemiselulosa&quot;, &quot;pektin&quot;, &quot;hemiselulosa / pektin&quot;] },
+                    { id: &quot;ba&quot;, label: &quot;(ba) Saluran sitoplasma antar sel&quot;, keys: [&quot;plasmodesmata&quot;, &quot;plasmodesma&quot;] },
+                    { id: &quot;bb&quot;, label: &quot;(bb) Zat penebal dinding sekunder&quot;, keys: [&quot;lignin&quot;] }
+                ]
+            },
+            {
+                station: 19,
+                title: &quot;Modifikasi Organ Tumbuhan&quot;,
+                questionText: &quot;19. Batang yang memodifikasi fungsi sebagai tempat penyimpanan air/makanan di dalam tanah contohnya adalah umbi batang, (bc), dan (bd). Modifikasi daun berbentuk duri pada kaktus berfungsi mengurangi (be).&quot;,
+                blanks: [
+                    { id: &quot;bc&quot;, label: &quot;(bc) Modifikasi batang tanah 1&quot;, keys: [&quot;rimpang&quot;, &quot;rhizoma&quot;, &quot;rizoma&quot;] },
+                    { id: &quot;bd&quot;, label: &quot;(bd) Modifikasi batang tanah 2&quot;, keys: [&quot;umbi lapis&quot;, &quot;bulbus&quot;] },
+                    { id: &quot;be&quot;, label: &quot;(be) Fungsi duri kaktus&quot;, keys: [&quot;transpirasi&quot;, &quot;penguapan&quot;] }
+                ]
+            },
+            {
+                station: 20,
+                title: &quot;Titik Tumbuh &amp; Meristem Sekunder&quot;,
+                questionText: &quot;20. Titik tumbuh primer terletak di ujung akar dan ujung (bf), sedangkan titik tumbuh sekunder berupa (bg) dan kambium (bh).&quot;,
+                blanks: [
+                    { id: &quot;bf&quot;, label: &quot;(bf) Titik tumbuh primer ujung&quot;, keys: [&quot;batang&quot;, &quot;pucuk&quot;] },
+                    { id: &quot;bg&quot;, label: &quot;(bg) Meristem sekunder pembuluh&quot;, keys: [&quot;kambium pembuluh&quot;, &quot;kambium vaskular&quot;, &quot;kambium&quot;] },
+                    { id: &quot;bh&quot;, label: &quot;(bh) Meristem sekunder kulit&quot;, keys: [&quot;gabus&quot;, &quot;felogen&quot;, &quot;kambium gabus&quot;] }
+                ]
+            },
+            {
+                station: 21,
+                title: &quot;Tipe Perkecambahan&quot;,
+                questionText: &quot;21. Perkecambahan di mana kotiledon terangkat ke atas permukaan tanah dinamakan perkecambahan (bi), sedangkan perkecambahan di mana kotiledon tetap berada di bawah tanah dinamakan (bj). Calon tunas di atas kotiledon dinamakan (bk).&quot;,
+                blanks: [
+                    { id: &quot;bi&quot;, label: &quot;(bi) Kotiledon terangkat&quot;, keys: [&quot;epigeal&quot;] },
+                    { id: &quot;bj&quot;, label: &quot;(bj) Kotiledon di bawah tanah&quot;, keys: [&quot;hipogeal&quot;] },
+                    { id: &quot;bk&quot;, label: &quot;(bk) Tunas di atas kotiledon&quot;, keys: [&quot;epikotil&quot;] }
+                ]
+            },
+            {
+                station: 22,
+                title: &quot;Anatomi Pelindung &amp; Pori&quot;,
+                questionText: &quot;22. Epidermis daun dilindungi oleh lapisan impermeabel yang dinamakan (bl), sedangkan celah pertukaran gas pada batang berkayu dinamakan (bm). Sel-sel penutup stomata mengandung organel (bn) untuk sintesis karbohidrat.&quot;,
+                blanks: [
+                    { id: &quot;bl&quot;, label: &quot;(bl) Lapisan impermeabel epidermis&quot;, keys: [&quot;kutikula&quot;] },
+                    { id: &quot;bm&quot;, label: &quot;(bm) Celah gas batang berkayu&quot;, keys: [&quot;lentisel&quot;] },
+                    { id: &quot;bn&quot;, label: &quot;(bn) Organel sel penutup stomata&quot;, keys: [&quot;kloroplas&quot;] }
+                ]
+            },
+            {
+                station: 23,
+                title: &quot;Zonasi Pertumbuhan Akar&quot;,
+                questionText: &quot;23. Bagian akar yang mengalami pembelahan sel paling aktif adalah daerah (bo), daerah yang sel-selnya mengalami pertambahan ukuran adalah daerah (bp), dan daerah yang sel-selnya terspesialisasi dinamakan daerah (bq).&quot;,
+                blanks: [
+                    { id: &quot;bo&quot;, label: &quot;(bo) Daerah pembelahan sel&quot;, keys: [&quot;pembelahan&quot;, &quot;meristematik&quot;] },
+                    { id: &quot;bp&quot;, label: &quot;(bp) Daerah pertambahan ukuran&quot;, keys: [&quot;pemanjangan&quot;, &quot;elongasi&quot;] },
+                    { id: &quot;bq&quot;, label: &quot;(bq) Daerah spesialisasi sel&quot;, keys: [&quot;diferensiasi&quot;, &quot;maturasi&quot;] }
+                ]
+            },
+            {
+                station: 24,
+                title: &quot;Spesialisasi Jaringan Parenkim&quot;,
+                questionText: &quot;24. Jaringan parenkim yang mengandung klorofil dinamakan (br), parenkim tempat penyimpan udara dinamakan (bs), sedangkan parenkim penyimpan air dinamakan (bt).&quot;,
+                blanks: [
+                    { id: &quot;br&quot;, label: &quot;(br) Parenkim berklorofil&quot;, keys: [&quot;klorenkim&quot;] },
+                    { id: &quot;bs&quot;, label: &quot;(bs) Parenkim penyimpan udara&quot;, keys: [&quot;aerenkim&quot;] },
+                    { id: &quot;bt&quot;, label: &quot;(bt) Parenkim penyimpan air&quot;, keys: [&quot;parenkim air&quot;] }
+                ]
+            },
+            {
+                station: 25,
+                title: &quot;Sifat Seksualitas Bunga&quot;,
+                questionText: &quot;25. Bunga jantan dan bunga betina yang berada pada individu tumbuhan yang sama dinamakan tumbuhan (bu), jika berada pada individu berbeda dinamakan tumbuhan (bv), sedangkan bunga yang tidak memiliki perhiasan bunga disebut bunga (bw).&quot;,
+                blanks: [
+                    { id: &quot;bu&quot;, label: &quot;(bu) Bunga jantan &amp; betina 1 individu&quot;, keys: [&quot;berumah satu&quot;, &quot;monoseus&quot;] },
+                    { id: &quot;bv&quot;, label: &quot;(bv) Bunga jantan &amp; betina beda individu&quot;, keys: [&quot;berumah dua&quot;, &quot;dioseus&quot;] },
+                    { id: &quot;bw&quot;, label: &quot;(bw) Bunga tanpa perhiasan&quot;, keys: [&quot;telanjang&quot;, &quot;bunga telanjang&quot;] }
+                ]
+            }
+        ];
+
+        function App() {
+            const [gameState, setGameState] = useState('welcome'); // welcome, playing, finished
+            const [currentStationIdx, setCurrentStationIdx] = useState(0);
+            const [timePerStation, setTimePerStation] = useState(60); // default 60 sec
+            const [timeLeft, setTimeLeft] = useState(60);
+            const [answers, setAnswers] = useState({});
+            const [isAutoRotate, setIsAutoRotate] = useState(true);
+            const [studentName, setStudentName] = useState('');
+            const [studentClass, setStudentClass] = useState('');
+
+            const timerRef = useRef(null);
+
+            // Initialize audio for bell/knock effect
+            const playSound = () =&gt; {
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.5);
+                } catch(e) {
+                    console.log('Audio error:', e);
+                }
+            };
+
+            // Timer Tick
+            useEffect(() =&gt; {
+                if (gameState === 'playing' &amp;&amp; isAutoRotate) {
+                    timerRef.current = setInterval(() =&gt; {
+                        setTimeLeft((prev) =&gt; {
+                            if (prev &lt;= 1) {
+                                playSound();
+                                handleNextStation();
+                                return timePerStation;
+                            }
+                            return prev - 1;
+                        });
+                    }, 1000);
+                }
+                return () =&gt; clearInterval(timerRef.current);
+            }, [gameState, currentStationIdx, isAutoRotate, timePerStation]);
+
+            const handleStartQuiz = () =&gt; {
+                if (!studentName.trim()) {
+                    alert('Harap masukkan nama peserta terlebih dahulu!');
+                    return;
+                }
+                setGameState('playing');
+                setCurrentStationIdx(0);
+                setTimeLeft(timePerStation);
+            };
+
+            const handleInputChange = (blankId, val) =&gt; {
+                setAnswers(prev =&gt; ({
+                    ...prev,
+                    [blankId]: val
+                }));
+            };
+
+            const handleNextStation = () =&gt; {
+                if (currentStationIdx &lt; quizData.length - 1) {
+                    setCurrentStationIdx(prev =&gt; prev + 1);
+                    setTimeLeft(timePerStation);
+                } else {
+                    setGameState('finished');
+                }
+            };
+
+            const handlePrevStation = () =&gt; {
+                if (currentStationIdx &gt; 0) {
+                    setCurrentStationIdx(prev =&gt; prev - 1);
+                    setTimeLeft(timePerStation);
+                }
+            };
+
+            const calculateScore = () =&gt; {
+                let totalCorrect = 0;
+                let totalQuestions = 75; // 25 stations x 3 blanks
+
+                quizData.forEach(st =&gt; {
+                    st.blanks.forEach(b =&gt; {
+                        const userAns = (answers[b.id] || '').trim().toLowerCase();
+                        const isMatch = b.keys.some(k =&gt; k.toLowerCase() === userAns);
+                        if (isMatch) totalCorrect++;
+                    });
+                });
+
+                const finalScore = Math.round((totalCorrect / totalQuestions) * 100);
+                return { totalCorrect, totalQuestions, finalScore };
+            };
+
+            // Render Views
+            if (gameState === 'welcome') {
+                return (
+                    &lt;div className=&quot;min-h-screen flex items-center justify-center p-4&quot;&gt;
+                        &lt;div className=&quot;bg-white rounded-2xl shadow-xl border border-emerald-100 max-w-xl w-full p-8 text-center&quot;&gt;
+                            &lt;div className=&quot;w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-2xl&quot;&gt;
+                                ð
+                            &lt;/div&gt;
+                            &lt;h1 className=&quot;text-3xl font-extrabold text-slate-800 mb-2&quot;&gt;Simulasi Ujian Ketok&lt;/h1&gt;
+                            &lt;p className=&quot;text-emerald-700 font-semibold mb-6&quot;&gt;Struktur &amp; Anatomi Tumbuhan (25 Pos)&lt;/p&gt;
+                            
+                            &lt;div className=&quot;space-y-4 text-left mb-6 bg-slate-50 p-4 rounded-xl text-sm text-slate-600 border border-slate-200&quot;&gt;
+                                &lt;p className=&quot;font-semibold text-slate-700&quot;&gt;Instruksi Praktikum:&lt;/p&gt;
+                                &lt;ul className=&quot;list-disc list-inside space-y-1&quot;&gt;
+                                    &lt;li&gt;Terdapat &lt;b&gt;25 Stasiun (Pos)&lt;/b&gt; soal berpindah otomatis.&lt;/li&gt;
+                                    &lt;li&gt;Setiap stasiun memiliki &lt;b&gt;3 isian singkat&lt;/b&gt;.&lt;/li&gt;
+                                    &lt;li&gt;Ketukan bel/detik akan berbunyi saat waktu stasiun habis.&lt;/li&gt;
+                                    &lt;li&gt;Isi jawaban secara tepat dan cepat sebelum pindah pos!&lt;/li&gt;
+                                &lt;/ul&gt;
+                            &lt;/div&gt;
+
+                            &lt;div className=&quot;space-y-4 text-left mb-6&quot;&gt;
+                                &lt;div&gt;
+                                    &lt;label className=&quot;block text-sm font-medium text-slate-700 mb-1&quot;&gt;Nama Peserta / Nim:&lt;/label&gt;
+                                    &lt;input 
+                                        type=&quot;text&quot; 
+                                        value={studentName}
+                                        onChange={(e) =&gt; setStudentName(e.target.value)}
+                                        placeholder=&quot;Masukkan nama lengkap&quot;
+                                        className=&quot;w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none&quot;
+                                    /&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label className=&quot;block text-sm font-medium text-slate-700 mb-1&quot;&gt;Kelas / Kelompok:&lt;/label&gt;
+                                    &lt;input 
+                                        type=&quot;text&quot; 
+                                        value={studentClass}
+                                        onChange={(e) =&gt; setStudentClass(e.target.value)}
+                                        placeholder=&quot;Contoh: Biologi A / Kelompok 3&quot;
+                                        className=&quot;w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none&quot;
+                                    /&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label className=&quot;block text-sm font-medium text-slate-700 mb-1&quot;&gt;Waktu Per Stasiun (Detik):&lt;/label&gt;
+                                    &lt;select 
+                                        value={timePerStation} 
+                                        onChange={(e) =&gt; setTimePerStation(Number(e.target.value))}
+                                        className=&quot;w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none bg-white&quot;
+                                    &gt;
+                                        &lt;option value={30}&gt;30 Detik (Sangat Cepat)&lt;/option&gt;
+                                        &lt;option value={45}&gt;45 Detik (Sedang)&lt;/option&gt;
+                                        &lt;option value={60}&gt;60 Detik (Standar Ujian)&lt;/option&gt;
+                                        &lt;option value={90}&gt;90 Detik (Santai)&lt;/option&gt;
+                                    &lt;/select&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+
+                            &lt;button 
+                                onClick={handleStartQuiz}
+                                className=&quot;w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg transition duration-200 transform active:scale-95&quot;
+                            &gt;
+                                Mulai Ujian Ketok
+                            &lt;/button&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                );
+            }
+
+            if (gameState === 'playing') {
+                const currentSt = quizData[currentStationIdx];
+                return (
+                    &lt;div className=&quot;min-h-screen p-4 md:p-8 max-w-4xl mx-auto flex flex-col justify-between&quot;&gt;
+                        {/* Header Info */}
+                        &lt;div className=&quot;bg-white rounded-xl shadow-md p-4 border border-emerald-100 flex flex-wrap justify-between items-center gap-4 mb-6&quot;&gt;
+                            &lt;div&gt;
+                                &lt;span className=&quot;text-xs font-semibold text-emerald-600 uppercase tracking-wider&quot;&gt;Peserta&lt;/span&gt;
+                                &lt;h3 className=&quot;font-bold text-slate-800&quot;&gt;{studentName || 'Siswa'} ({studentClass || '-'})&lt;/h3&gt;
+                            &lt;/div&gt;
+
+                            {/* Timer Display */}
+                            &lt;div className=&quot;flex items-center space-x-4&quot;&gt;
+                                &lt;div className=&quot;text-center&quot;&gt;
+                                    &lt;span className=&quot;text-xs text-slate-500 block&quot;&gt;Status Rotasi&lt;/span&gt;
+                                    &lt;button 
+                                        onClick={() =&gt; setIsAutoRotate(!isAutoRotate)}
+                                        className={`px-3 py-1 rounded-full text-xs font-bold ${isAutoRotate ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}
+                                    &gt;
+                                        {isAutoRotate ? 'â±ï¸ Otomatis' : 'â¸ï¸ Manual Jeda'}
+                                    &lt;/button&gt;
+                                &lt;/div&gt;
+                                &lt;div className={`border-2 rounded-xl px-4 py-2 font-mono text-2xl font-black flex items-center justify-center min-w-[90px] ${timeLeft &lt;= 10 ? 'pulse-timer border-red-500 bg-red-50' : 'border-emerald-500 text-emerald-700 bg-emerald-50'}`}&gt;
+                                    {timeLeft}s
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        {/* Station Progress Bar */}
+                        &lt;div className=&quot;w-full bg-slate-200 h-2.5 rounded-full overflow-hidden mb-6&quot;&gt;
+                            &lt;div 
+                                className=&quot;bg-emerald-500 h-full transition-all duration-300&quot;
+                                style={{ width: `${((currentStationIdx + 1) / quizData.length) * 100}%` }}
+                            &gt;&lt;/div&gt;
+                        &lt;/div&gt;
+
+                        {/* Question Card */}
+                        &lt;div className=&quot;bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8 mb-6 flex-grow flex flex-col justify-between&quot;&gt;
+                            &lt;div&gt;
+                                &lt;div className=&quot;flex justify-between items-center mb-4&quot;&gt;
+                                    &lt;span className=&quot;bg-emerald-600 text-white font-bold text-sm px-3 py-1 rounded-lg&quot;&gt;
+                                        STASIUN {currentSt.station} / {quizData.length}
+                                    &lt;/span&gt;
+                                    &lt;span className=&quot;text-xs font-medium text-slate-400&quot;&gt;
+                                        {currentSt.title}
+                                    &lt;/span&gt;
+                                &lt;/div&gt;
+
+                                &lt;div className=&quot;bg-emerald-50/50 rounded-xl p-5 border border-emerald-100 mb-6 text-slate-800 text-base md:text-lg leading-relaxed font-medium&quot;&gt;
+                                    {currentSt.questionText}
+                                &lt;/div&gt;
+
+                                {/* Answer Inputs */}
+                                &lt;div className=&quot;space-y-4&quot;&gt;
+                                    &lt;h4 className=&quot;font-semibold text-slate-700 text-sm&quot;&gt;Isi Isian Singkat:&lt;/h4&gt;
+                                    {currentSt.blanks.map((b) =&gt; (
+                                        &lt;div key={b.id} className=&quot;flex flex-col sm:flex-row sm:items-center gap-2 bg-slate-50 p-3 rounded-lg border border-slate-200&quot;&gt;
+                                            &lt;label className=&quot;sm:w-1/3 text-xs font-bold text-slate-600&quot;&gt;{b.label}&lt;/label&gt;
+                                            &lt;input 
+                                                type=&quot;text&quot; 
+                                                value={answers[b.id] || ''}
+                                                onChange={(e) =&gt; handleInputChange(b.id, e.target.value)}
+                                                placeholder=&quot;Ketik jawaban...&quot;
+                                                className=&quot;sm:w-2/3 border border-slate-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none&quot;
+                                            /&gt;
+                                        &lt;/div&gt;
+                                    ))}
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+
+                            {/* Controls */}
+                            &lt;div className=&quot;flex justify-between items-center mt-8 pt-4 border-t border-slate-100&quot;&gt;
+                                &lt;button 
+                                    onClick={handlePrevStation}
+                                    disabled={currentStationIdx === 0}
+                                    className=&quot;px-4 py-2 border border-slate-300 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed&quot;
+                                &gt;
+                                    â Pos Sebelumnya
+                                &lt;/button&gt;
+                                &lt;button 
+                                    onClick={handleNextStation}
+                                    className=&quot;px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-bold shadow-md transition&quot;
+                                &gt;
+                                    {currentStationIdx === quizData.length - 1 ? 'Selesaikan Ujian' : 'Pos Berikutnya â'}
+                                &lt;/button&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                );
+            }
+
+            if (gameState === 'finished') {
+                const { totalCorrect, totalQuestions, finalScore } = calculateScore();
+                return (
+                    &lt;div className=&quot;min-h-screen p-4 md:p-8 max-w-4xl mx-auto&quot;&gt;
+                        {/* Score Overview Card */}
+                        &lt;div className=&quot;bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 md:p-8 mb-8 text-center&quot;&gt;
+                            &lt;h2 className=&quot;text-2xl font-black text-slate-800 mb-1&quot;&gt;Hasil Ujian Ketok Praktikum&lt;/h2&gt;
+                            &lt;p className=&quot;text-slate-500 text-sm mb-6&quot;&gt;Struktur &amp; Anatomi Tumbuhan&lt;/p&gt;
+
+                            &lt;div className=&quot;grid grid-cols-1 md:grid-cols-3 gap-4 mb-6&quot;&gt;
+                                &lt;div className=&quot;bg-slate-50 p-4 rounded-xl border border-slate-200&quot;&gt;
+                                    &lt;span className=&quot;text-xs text-slate-500 block mb-1&quot;&gt;Peserta&lt;/span&gt;
+                                    &lt;p className=&quot;font-bold text-slate-800&quot;&gt;{studentName}&lt;/p&gt;
+                                    &lt;p className=&quot;text-xs text-slate-600&quot;&gt;{studentClass}&lt;/p&gt;
+                                &lt;/div&gt;
+                                &lt;div className=&quot;bg-emerald-50 p-4 rounded-xl border border-emerald-200&quot;&gt;
+                                    &lt;span className=&quot;text-xs text-emerald-600 block mb-1&quot;&gt;Total Benar&lt;/span&gt;
+                                    &lt;p className=&quot;font-extrabold text-2xl text-emerald-700&quot;&gt;{totalCorrect} / {totalQuestions}&lt;/p&gt;
+                                &lt;/div&gt;
+                                &lt;div className=&quot;bg-emerald-600 text-white p-4 rounded-xl shadow-md&quot;&gt;
+                                    &lt;span className=&quot;text-xs opacity-80 block mb-1&quot;&gt;Nilai Akhir&lt;/span&gt;
+                                    &lt;p className=&quot;font-black text-3xl&quot;&gt;{finalScore}&lt;/p&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+
+                            &lt;div className=&quot;flex justify-center gap-4&quot;&gt;
+                                &lt;button 
+                                    onClick={() =&gt; setGameState('welcome')}
+                                    className=&quot;px-5 py-2.5 border border-slate-300 hover:bg-slate-100 rounded-xl font-semibold text-slate-700 text-sm&quot;
+                                &gt;
+                                    Ulangi Ujian
+                                &lt;/button&gt;
+                                &lt;button 
+                                    onClick={() =&gt; window.print()}
+                                    className=&quot;px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl font-semibold text-sm shadow&quot;
+                                &gt;
+                                    Cetak Lembar Jawaban
+                                &lt;/button&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        {/* Detailed Key Discussion */}
+                        &lt;div className=&quot;bg-white rounded-2xl shadow-md border border-slate-200 p-6&quot;&gt;
+                            &lt;h3 className=&quot;font-bold text-lg text-slate-800 mb-4 pb-2 border-b border-slate-200&quot;&gt;
+                                Pembahasan &amp; Kunci Jawaban Lengkap
+                            &lt;/h3&gt;
+
+                            &lt;div className=&quot;space-y-6&quot;&gt;
+                                {quizData.map((st) =&gt; (
+                                    &lt;div key={st.station} className=&quot;border-b border-slate-100 pb-4&quot;&gt;
+                                        &lt;div className=&quot;flex items-center gap-2 mb-2&quot;&gt;
+                                            &lt;span className=&quot;bg-slate-100 text-slate-700 font-bold text-xs px-2.5 py-1 rounded&quot;&gt;
+                                                Stasiun {st.station}
+                                            &lt;/span&gt;
+                                            &lt;span className=&quot;text-xs font-semibold text-slate-500&quot;&gt;{st.title}&lt;/span&gt;
+                                        &lt;/div&gt;
+                                        &lt;p className=&quot;text-xs text-slate-600 mb-3 bg-slate-50 p-2.5 rounded border border-slate-100&quot;&gt;
+                                            {st.questionText}
+                                        &lt;/p&gt;
+
+                                        &lt;div className=&quot;grid grid-cols-1 sm:grid-cols-3 gap-3&quot;&gt;
+                                            {st.blanks.map(b =&gt; {
+                                                const userAns = (answers[b.id] || '').trim();
+                                                const isCorrect = b.keys.some(k =&gt; k.toLowerCase() === userAns.toLowerCase());
+
+                                                return (
+                                                    &lt;div 
+                                                        key={b.id} 
+                                                        className={`p-3 rounded-lg text-xs border ${isCorrect ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}
+                                                    &gt;
+                                                        &lt;span className=&quot;font-semibold text-slate-700 block mb-1&quot;&gt;{b.label}&lt;/span&gt;
+                                                        &lt;p className=&quot;mb-1&quot;&gt;
+                                                            &lt;b&gt;Jawaban Anda:&lt;/b&gt; {userAns || &lt;span className=&quot;italic text-slate-400&quot;&gt;(Kosong)&lt;/span&gt;}
+                                                        &lt;/p&gt;
+                                                        &lt;p className=&quot;text-emerald-700 font-medium&quot;&gt;
+                                                            &lt;b&gt;Kunci:&lt;/b&gt; {b.keys[0]}
+                                                        &lt;/p&gt;
+                                                    &lt;/div&gt;
+                                                );
+                                            })}
+                                        &lt;/div&gt;
+                                    &lt;/div&gt;
+                                ))}
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                );
+            }
+
+            return null;
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(&lt;App /&gt;);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+```eof</pre>
+</body>
+</html>
